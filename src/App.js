@@ -72,21 +72,8 @@ class App extends Component {
   }
 
   onPopoverTrigger(marker) {
-    return (
-      <div
-        className="row"
-        style={{ margin: "0", maxWidth: "300px", paddingTop: 10 }}
-      >
-        <div className="col s12">
-          <div>
-            <strong>{marker._source.name}</strong>
-          </div>
-          <p style={{ margin: "5px 0", lineHeight: "18px" }}>
-            {marker._source.address}
-          </p>
-        </div>
-      </div>
-    );
+    console.log('triggger',marker)
+
   }
 
   render() {
@@ -96,7 +83,7 @@ class App extends Component {
           app="yelp"
           credentials="PNlPPw1xC:7de6b493-32e2-44e2-93be-221058f97090"
           type="place"
-          theme="rbc-red"
+
         >
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="#">
@@ -279,12 +266,40 @@ class App extends Component {
               />
             </div>
 
-            <div className="col-12 col-lg-3 col-md-3 col-sm-6" />
-          </div>
+            <div className="col-lg-3 col-md-3 col-sm-6" >
+                <ReactiveMap
+                dataField="location"
+                componentId="maps"
+                defaultZoom={13}
+                defaultCenter={{ lat: 38.23, lon: -85.76 }}
+                historicalData={true}
+                setMarkerCluster={true}
+                showMapStyles={false}
+                showSearchAsMove={false}
+                defaultMapStyle="Light Monochrome"
+                onPopoverTrigger={this.onPopoverTrigger}
+                autoCenter={true}
+                size={100}
+                react={{
+                  and: [
+                    "categoryReactor",
+                    "ratingsReactor",
+                    "cuisineReactor",
+                    "wifiReactor",
+                    "bookingReactor",
+                    "musicReactor",
+                    "dogReactor",
+                    "nameReactor"
+                  ]}}
+              />
+              </div>
+          
+            </div>
         </ReactiveBase>
       </div>
     );
   }
 }
+
 
 export default App;
