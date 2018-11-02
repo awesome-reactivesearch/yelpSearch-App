@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { 
           ReactiveBase,
-          ResultList
+          ResultList,
+          MultiList
 } from '@appbaseio/reactivesearch';
+
 
 // Importing Images
 import americanFood from './Images/americanFood.jpg'
@@ -32,7 +34,7 @@ class App extends Component {
             <p>{resturant.address}, {resturant.postal_code}</p>
             <span className="tag">{resturant.place_type}</span>
             <span className="tag">{resturant.cuisine}</span>
-            <span><a className="call-btn" href={`tel:${resturant.phone_number}`}><i className="fa fa-phone"></i> Call</a></span>
+            <span className = "btn btn-light"><a className="call-btn" href={`tel:${resturant.phone_number}`}><i className="fa fa-phone"></i> Call Now</a></span>
        </div>
       )
     };
@@ -50,8 +52,19 @@ class App extends Component {
           type="place">
 
            <div class="row">
-            <div class="col-sm-2" style= {{ "backgroundColor" : "white" }}></div>
-              <div className="col-sm-6">
+              <div class="col-sm-3" >
+                <div className="">
+                  <MultiList
+                    dataField="place_type.raw"
+                    title="Delivery Options"
+                    componentId="categoryReactor"
+                    react={{
+                      and: [""]
+                    }}
+                  />
+                 </div>
+              </div>
+              <div className="col-sm-5">
                 <ResultList
                   componentId="queryResult"
                   dataField="name"
@@ -59,9 +72,14 @@ class App extends Component {
                   size={20}
                   onData={this.onData}
                   pagination={true}
+                  react={{and: ["categoryReactor"]}}
                 />
               </div>
-            <div class="col-sm-4" style= {{ "backgroundColor" : "white" }}></div>
+            
+            <div class="col-sm-4" style= {{ "backgroundColor" : "white" }}>
+
+            </div>
+          
           </div>
       </ReactiveBase>
       </div>
