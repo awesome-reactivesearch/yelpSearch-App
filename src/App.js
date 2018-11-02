@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { 
           ReactiveBase,
           ResultList,
-          MultiList
+          MultiList,
+          RatingsFilter
 } from '@appbaseio/reactivesearch';
+
+import './App.css'
 
 
 // Importing Images
@@ -35,6 +38,7 @@ class App extends Component {
             <span className="tag">{resturant.place_type}</span>
             <span className="tag">{resturant.cuisine}</span>
             <span className = "btn btn-light"><a className="call-btn" href={`tel:${resturant.phone_number}`}><i className="fa fa-phone"></i> Call Now</a></span>
+            <span>{resturant.rating}</span>
        </div>
       )
     };
@@ -45,24 +49,57 @@ class App extends Component {
   render() {
     return (
 
-      <div class="container-fluid">
+      <div className="container-fluid">
         <ReactiveBase
           app="yelp"
           credentials="PNlPPw1xC:7de6b493-32e2-44e2-93be-221058f97090"
           type="place">
 
-           <div class="row">
-              <div class="col-sm-3" >
+           <div className="row">
+              <div className="col-sm-3 scroll" >
                 <div className="">
                   <MultiList
                     dataField="place_type.raw"
-                    title="Delivery Options"
+                    title="Dine Options"
                     componentId="categoryReactor"
                     react={{
-                      and: [""]
+                      and: ["ratingsReactor", "cuisineReactor"]
                     }}
                   />
                  </div>
+
+                 <div>
+                    <MultiList
+                    dataField="cuisine.raw"
+                    title="Cuisine Options"
+                    componentId="cuisineReactor"
+                    react={{
+                      and: ["ratingsReactor", "categoryReactor"]
+                    }}
+                  />
+                 </div>
+
+                 <div className="">
+                    <RatingsFilter
+                      componentId="ratingsReactor"
+                      dataField="rating"
+                      title="Avg. Customer Reviews"
+
+                      data={[
+                        { start: 4, end: 5, label: ">= 4 stars" },
+                        { start: 3, end: 5, label: ">= 3 stars" },
+                        { start: 2, end: 5, label: ">= 2 stars" },
+                        { start: 1, end: 5, label: "> 1 stars" }
+                      ]}
+                      defaultSelected={{start: 2, end: 5}}
+                      react={{
+                        and: [""]
+                      }}
+                    />
+                 </div>
+
+
+
               </div>
               <div className="col-sm-5">
                 <ResultList
@@ -72,11 +109,11 @@ class App extends Component {
                   size={20}
                   onData={this.onData}
                   pagination={true}
-                  react={{and: ["categoryReactor"]}}
+                  react={{and: ["categoryReactor", "ratingsReactor"]}}
                 />
               </div>
             
-            <div class="col-sm-4" style= {{ "backgroundColor" : "white" }}>
+            <div className="col-sm-4" style= {{ "backgroundColor" : "white" }}>
 
             </div>
           
