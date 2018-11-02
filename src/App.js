@@ -5,9 +5,11 @@ import {
   MultiList,
   RatingsFilter,
   SelectedFilters,
-  MultiDataList
+  MultiDataList,
+  DataSearch
 } from "@appbaseio/reactivesearch";
 
+import { ReactiveMap } from "@appbaseio/reactivemaps";
 import "./App.css";
 
 // Importing Images
@@ -69,6 +71,24 @@ class App extends Component {
     return result;
   }
 
+  onPopoverTrigger(marker) {
+    return (
+      <div
+        className="row"
+        style={{ margin: "0", maxWidth: "300px", paddingTop: 10 }}
+      >
+        <div className="col s12">
+          <div>
+            <strong>{marker._source.name}</strong>
+          </div>
+          <p style={{ margin: "5px 0", lineHeight: "18px" }}>
+            {marker._source.address}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -76,9 +96,53 @@ class App extends Component {
           app="yelp"
           credentials="PNlPPw1xC:7de6b493-32e2-44e2-93be-221058f97090"
           type="place"
+          theme="rbc-red"
         >
+          <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <a className="navbar-brand" href="#">
+              Yelp Search
+            </a>
+
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+
+            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+              <div className="col-lg-7">
+                <DataSearch
+                  componentId="nameReactor"
+                  placeholder="Search for Restaurants, Bars"
+                  dataField="name"
+                  searchInputId="NameSearch" iconPosition="right"
+                />
+              </div>
+              <div className="links">
+                <a
+                  target="_blank"
+                  href="https://github.com/appbaseio/reactivesearch" className = "btn margin-right"
+                >
+                <i className="fa fa-github" aria-hidden="true" /> Github
+                </a>
+                <a
+                  target="_blank"
+                  href="https://opensource.appbase.io/reactive-manual/" className = "btn  margin-right"
+                >
+                <i className="fa fa-book" aria-hidden="true" /> Documentation
+                </a>
+              </div>
+            </div>
+          </nav>
+
           <div className="row">
-            <div className="col-sm-3 scroll">
+            <div className="col-8 col-lg-3 col-md-3 col-sm-4 scroll">
               <div className="box">
                 <MultiList
                   dataField="place_type.raw"
@@ -88,7 +152,15 @@ class App extends Component {
                   showFilter={true}
                   filterLabel="Dine Options"
                   react={{
-                    and: ["ratingsReactor", "cuisineReactor", "wifiReactor", "dogReactor", "musicReactor", "bookingReactor"]
+                    and: [
+                      "ratingsReactor",
+                      "cuisineReactor",
+                      "wifiReactor",
+                      "dogReactor",
+                      "musicReactor",
+                      "bookingReactor",
+                      "nameReactor"
+                    ]
                   }}
                 />
               </div>
@@ -102,7 +174,15 @@ class App extends Component {
                   showFilter={true}
                   filterLabel="Cuisine Options"
                   react={{
-                    and: ["ratingsReactor", "categoryReactor", "wifiReactor", "dogReactor", "musicReactor", "bookingReactor"]
+                    and: [
+                      "ratingsReactor",
+                      "categoryReactor",
+                      "wifiReactor",
+                      "dogReactor",
+                      "musicReactor",
+                      "bookingReactor",
+                      "nameReactor"
+                    ]
                   }}
                 />
               </div>
@@ -175,7 +255,7 @@ class App extends Component {
                 />
               </div>
             </div>
-            <div className="col-sm-6 scroll">
+            <div className="col-12 col-lg-6 col-md-6 col-sm-8 scroll">
               <SelectedFilters />
               <ResultList
                 componentId="queryResult"
@@ -192,13 +272,14 @@ class App extends Component {
                     "wifiReactor",
                     "bookingReactor",
                     "musicReactor",
-                    "dogReactor"
+                    "dogReactor",
+                    "nameReactor"
                   ]
                 }}
               />
             </div>
 
-            <div className="col-sm-3" style={{ backgroundColor: "white" }} />
+            <div className="col-12 col-lg-3 col-md-3 col-sm-6" />
           </div>
         </ReactiveBase>
       </div>

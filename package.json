@@ -23,6 +23,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@appbaseio/reactivemaps": "^2.0.1",
     "@appbaseio/reactivesearch": "^2.13.0"
   }
 }
