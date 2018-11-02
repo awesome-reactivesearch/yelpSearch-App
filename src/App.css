@@ -33,5 +33,27 @@
 
 .scroll{
     overflow-y: auto !important;
-    max-height: 800px !important;
+    max-height: 650px !important;
+}
+.tag{
+    display: inline-block;
+    padding: 1px 6px;
+    margin: 4px 0;
+    background-color: #eee;
+    border-radius: 2px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.btn{
+  border-radius: 5px;
+  border: 1px solid skyblue
+}
+
+.btn > a{
+  text-decoration: none;
+}
+
+.fa-star{
+  color: rgb(255, 169, 27) !important;
 }

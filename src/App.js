@@ -3,7 +3,8 @@ import {
           ReactiveBase,
           ResultList,
           MultiList,
-          RatingsFilter
+          RatingsFilter,
+          SelectedFilters
 } from '@appbaseio/reactivesearch';
 
 import './App.css'
@@ -29,16 +30,24 @@ class App extends Component {
       americanFood :
       sandwich ;
 
+    const stars = [];
+    const { rating, postal_code, place_type, address, phone_number, cuisine  } = resturant;
+    for(let x = 0; x < rating; x++){
+      stars.push(<span key={x}><i className="fa fa-star"></i></span>);
+    }
+
     const result = {
       image: image,
       title: resturant.name,
       description: (
         <div>
-            <p>{resturant.address}, {resturant.postal_code}</p>
-            <span className="tag">{resturant.place_type}</span>
-            <span className="tag">{resturant.cuisine}</span>
-            <span className = "btn btn-light"><a className="call-btn" href={`tel:${resturant.phone_number}`}><i className="fa fa-phone"></i> Call Now</a></span>
-            <span>{resturant.rating}</span>
+            <p>{address}, { postal_code }</p>
+            <span className="tag">{ place_type }</span>
+            <span className="tag">{ cuisine }</span>
+            <div>Avg. Customer Reviews : { stars }</div>
+            <div className = "btn float-right">
+              <a className="call-btn" href={`tel:${phone_number}`}><i className="fa fa-phone"></i> Call Now</a>
+            </div>
        </div>
       )
     };
@@ -62,6 +71,9 @@ class App extends Component {
                     dataField="place_type.raw"
                     title="Dine Options"
                     componentId="categoryReactor"
+                    placeholder="Filter Dine"
+                    showFilter={true}
+                    filterLabel="Dine Options"
                     react={{
                       and: ["ratingsReactor", "cuisineReactor"]
                     }}
@@ -73,6 +85,9 @@ class App extends Component {
                     dataField="cuisine.raw"
                     title="Cuisine Options"
                     componentId="cuisineReactor"
+                    placeholder="Filter Cuisine"
+                    showFilter={true}
+                    filterLabel="Cuisine Options"
                     react={{
                       and: ["ratingsReactor", "categoryReactor"]
                     }}
@@ -83,15 +98,16 @@ class App extends Component {
                     <RatingsFilter
                       componentId="ratingsReactor"
                       dataField="rating"
-                      title="Avg. Customer Reviews"
 
+                      title="Avg. Customer Reviews"
                       data={[
                         { start: 4, end: 5, label: ">= 4 stars" },
                         { start: 3, end: 5, label: ">= 3 stars" },
                         { start: 2, end: 5, label: ">= 2 stars" },
                         { start: 1, end: 5, label: "> 1 stars" }
                       ]}
-                      defaultSelected={{start: 2, end: 5}}
+                      showFilter={true}
+                      filterLabel="Avg. Customer Reviews"
                       react={{
                         and: [""]
                       }}
@@ -101,7 +117,8 @@ class App extends Component {
 
 
               </div>
-              <div className="col-sm-5">
+              <div className="col-sm-6 scroll">
+                <SelectedFilters />
                 <ResultList
                   componentId="queryResult"
                   dataField="name"
@@ -113,7 +130,7 @@ class App extends Component {
                 />
               </div>
             
-            <div className="col-sm-4" style= {{ "backgroundColor" : "white" }}>
+            <div className="col-sm-3" style= {{ "backgroundColor" : "white" }}>
 
             </div>
           
