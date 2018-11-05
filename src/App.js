@@ -103,7 +103,7 @@ class App extends Component {
             </button>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-              <div className="col-lg-7">
+              <div className="col-lg-7 dataSearch">
                 <DataSearch
                   componentId="nameReactor"
                   placeholder="Search for Restaurants, Bars"
@@ -114,13 +114,13 @@ class App extends Component {
               <div className="links">
                 <a
                   target="_blank"
-                  href="https://github.com/appbaseio/reactivesearch" className = "btn margin-right"
+                  href="https://github.com/appbaseio/reactivesearch" className = "btn link"
                 >
                 <i className="fa fa-github" aria-hidden="true" /> Github
                 </a>
                 <a
                   target="_blank"
-                  href="https://opensource.appbase.io/reactive-manual/" className = "btn  margin-right"
+                  href="https://opensource.appbase.io/reactive-manual/" className = "btn  link"
                 >
                 <i className="fa fa-book" aria-hidden="true" /> Documentation
                 </a>
