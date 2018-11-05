@@ -71,9 +71,17 @@ class App extends Component {
     return result;
   }
 
-  onPopoverTrigger(marker) {
-    console.log('triggger',marker)
-
+  onPopoverClick(marker) {
+    return (<div className="row" style={{ margin: "0", maxWidth: "300px", paddingTop: 10 }}>
+      <div className="col s12">
+        <div>
+          <strong>{marker.name}</strong>
+        </div>
+        <p style={{ margin: "5px 0", lineHeight: "18px" }}>
+          {marker.address}
+        </p>
+      </div>
+    </div>);
   }
 
   render() {
@@ -277,7 +285,7 @@ class App extends Component {
                 showMapStyles={false}
                 showSearchAsMove={false}
                 defaultMapStyle="Light Monochrome"
-                onPopoverTrigger={this.onPopoverTrigger}
+                onPopoverClick={this.onPopoverClick}
                 autoCenter={true}
                 size={100}
                 react={{
