@@ -6,7 +6,8 @@ import {
   RatingsFilter,
   SelectedFilters,
   MultiDataList,
-  DataSearch
+  DataSearch,
+  RangeSlider
 } from "@appbaseio/reactivesearch";
 
 import { ReactiveMap } from "@appbaseio/reactivemaps";
@@ -25,22 +26,15 @@ class App extends Component {
       resturant.cuisine === "Bar Food"
         ? barFood
         : resturant.cuisine === "Desserts"
-          ? desserts
-          : resturant.cuisine === "Breakfast"
-            ? breakfast
-            : resturant.cuisine === "American"
-              ? americanFood
-              : sandwich;
+        ? desserts
+        : resturant.cuisine === "Breakfast"
+        ? breakfast
+        : resturant.cuisine === "American"
+        ? americanFood
+        : sandwich;
 
     const stars = [];
-    const {
-      rating,
-      postal_code,
-      place_type,
-      address,
-      phone_number,
-      cuisine
-    } = resturant;
+    const { rating, currency, address, cuisine } = resturant;
     for (let x = 0; x < rating; x++) {
       stars.push(
         <span key={x}>
@@ -54,17 +48,10 @@ class App extends Component {
       title: resturant.name,
       description: (
         <div>
-          <p>
-            {address}, {postal_code}
-          </p>
-          <span className="tag">{place_type}</span>
+          <p>{address}</p>
+          <span className="tag">{currency}</span>
           <span className="tag">{cuisine}</span>
           <div>Avg. Customer Reviews : {stars}</div>
-          <div className="btn float-right">
-            <a className="call-btn" href={`tel:${phone_number}`}>
-              <i className="fa fa-phone" /> Call Now
-            </a>
-          </div>
         </div>
       )
     };
@@ -72,26 +59,30 @@ class App extends Component {
   }
 
   onPopoverClick(marker) {
-    return (<div className="row" style={{ margin: "0", maxWidth: "300px", paddingTop: 10 }}>
-      <div className="col s12">
-        <div>
-          <strong>{marker.name}</strong>
+    return (
+      <div
+        className="row"
+        style={{ margin: "0", maxWidth: "300px", paddingTop: 10 }}
+      >
+        <div className="col s12">
+          <div>
+            <strong>{marker.name}</strong>
+          </div>
+          <p style={{ margin: "5px 0", lineHeight: "18px" }}>
+            {marker.address}
+          </p>
         </div>
-        <p style={{ margin: "5px 0", lineHeight: "18px" }}>
-          {marker.address}
-        </p>
       </div>
-    </div>);
+    );
   }
 
   render() {
     return (
       <div className="container-fluid">
         <ReactiveBase
-          app="yelp"
-          credentials="PNlPPw1xC:7de6b493-32e2-44e2-93be-221058f97090"
-          type="place"
-
+          app="yelp-app"
+          credentials="hkXdk3vcA:a32683f3-c8ad-45db-8c86-2ac2c0f45e0c"
+          type="yelp-app"
         >
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="#">
@@ -110,27 +101,33 @@ class App extends Component {
               <span className="navbar-toggler-icon" />
             </button>
 
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
               <div className="col-lg-7 dataSearch">
                 <DataSearch
                   componentId="nameReactor"
                   placeholder="Search for Restaurants, Bars"
                   dataField="name"
-                  searchInputId="NameSearch" iconPosition="right"
+                  searchInputId="NameSearch"
+                  iconPosition="right"
                 />
               </div>
               <div className="links">
                 <a
                   target="_blank"
-                  href="https://github.com/appbaseio/reactivesearch" className = "btn link"
+                  href="https://github.com/appbaseio/reactivesearch"
+                  className="btn link"
                 >
-                <i className="fa fa-github" aria-hidden="true" /> Github
+                  <i className="fa fa-github" aria-hidden="true" /> Github
                 </a>
                 <a
                   target="_blank"
-                  href="https://opensource.appbase.io/reactive-manual/" className = "btn  link"
+                  href="https://opensource.appbase.io/reactive-manual/"
+                  className="btn link"
                 >
-                <i className="fa fa-book" aria-hidden="true" /> Documentation
+                  <i className="fa fa-book" aria-hidden="true" /> Documentation
                 </a>
               </div>
             </div>
@@ -140,21 +137,22 @@ class App extends Component {
             <div className="col-8 col-lg-3 col-md-3 col-sm-4 scroll">
               <div className="box">
                 <MultiList
-                  dataField="place_type.raw"
-                  title="Dine Options"
-                  componentId="categoryReactor"
-                  placeholder="Filter Dine"
+                  dataField="currency.keyword"
+                  title="Currency Options"
+                  componentId="currencyReactor"
+                  placeholder="Filter Currency"
                   showFilter={true}
-                  filterLabel="Dine Options"
+                  filterLabel="Currency Options"
                   react={{
                     and: [
                       "ratingsReactor",
                       "cuisineReactor",
-                      "wifiReactor",
-                      "dogReactor",
-                      "musicReactor",
+                      "deliveringNowReactor",
+                      "tableBookinReactor",
+                      "deliveryReactor",
                       "bookingReactor",
-                      "nameReactor"
+                      "nameReactor",
+                      "RangeSliderSensor"
                     ]
                   }}
                 />
@@ -162,7 +160,7 @@ class App extends Component {
 
               <div className="box">
                 <MultiList
-                  dataField="cuisine.raw"
+                  dataField="cuisine.keyword"
                   title="Cuisine Options"
                   componentId="cuisineReactor"
                   placeholder="Filter Cuisine"
@@ -171,13 +169,33 @@ class App extends Component {
                   react={{
                     and: [
                       "ratingsReactor",
-                      "categoryReactor",
-                      "wifiReactor",
-                      "dogReactor",
+                      "currencyReactor",
+                      "deliveringNowReactor",
+                      "tableBookinReactor",
                       "musicReactor",
                       "bookingReactor",
-                      "nameReactor"
+                      "nameReactor",
+                      "RangeSliderSensor"
                     ]
+                  }}
+                />
+              </div>
+
+              <div className="box">
+                <RangeSlider
+                  componentId="RangeSliderSensor"
+                  dataField="average_cost_for_two"
+                  title="Average Cost for Two"
+                  range={{
+                    start: 0,
+                    end: 7000
+                  }}
+                  rangeLabels={{
+                    start: "Low",
+                    end: "High"
+                  }}
+                  react={{
+                    and: ["cuisineReactor", "currencyReactor"]
                   }}
                 />
               </div>
@@ -203,54 +221,43 @@ class App extends Component {
 
               <div className="box">
                 <MultiDataList
-                  dataField="wifi"
-                  componentId="wifiReactor"
+                  dataField="delivering_now"
+                  componentId="deliveringNowReactor"
                   title="Refine By"
                   showSearch={false}
                   data={[
                     {
-                      label: "Wifi",
+                      label: "Delivering Now",
                       value: true
                     }
                   ]}
                 />
 
                 <MultiDataList
-                  dataField="dog_friendly"
-                  componentId="dogReactor"
+                  dataField="has_table_booking"
+                  componentId="tableBookinReactor"
                   showSearch={false}
                   data={[
                     {
-                      label: "Dog Friendly",
+                      label: "Has Table Bookings",
                       value: true
                     }
                   ]}
                 />
                 <MultiDataList
-                  dataField="live_music"
-                  componentId="musicReactor"
+                  dataField="online_delivery"
+                  componentId="deliveryReactor"
                   showSearch={false}
                   data={[
                     {
-                      label: "Live Music",
-                      value: true
-                    }
-                  ]}
-                />
-                <MultiDataList
-                  dataField="online_bookings"
-                  componentId="bookingReactor"
-                  showSearch={false}
-                  data={[
-                    {
-                      label: "Online Bookings",
+                      label: "Online Delivery",
                       value: true
                     }
                   ]}
                 />
               </div>
             </div>
-            <div className="col-12 col-lg-6 col-md-6 col-sm-8 scroll">
+            <div className="col-12 col-lg-6 col-md-6 col-sm-8 scroll marginBottom">
               <SelectedFilters />
               <ResultList
                 componentId="queryResult"
@@ -261,25 +268,26 @@ class App extends Component {
                 pagination={true}
                 react={{
                   and: [
-                    "categoryReactor",
+                    "currencyReactor",
                     "ratingsReactor",
                     "cuisineReactor",
-                    "wifiReactor",
+                    "deliveringNowReactor",
                     "bookingReactor",
-                    "musicReactor",
-                    "dogReactor",
-                    "nameReactor"
+                    "deliveryReactor",
+                    "tableBookinReactor",
+                    "nameReactor",
+                    "RangeSliderSensor"
                   ]
                 }}
               />
             </div>
 
-            <div className="col-lg-3 col-md-3 col-sm-6" >
-                <ReactiveMap
+            <div className="col-lg-3 col-md-3 col-sm-6">
+              <ReactiveMap
                 dataField="location"
                 componentId="maps"
                 defaultZoom={13}
-                defaultCenter={{ lat: 38.23, lon: -85.76 }}
+                defaultCenter={{ lat: 14.55436, lng: -85.76 }}
                 historicalData={true}
                 setMarkerCluster={true}
                 showMapStyles={false}
@@ -290,24 +298,24 @@ class App extends Component {
                 size={100}
                 react={{
                   and: [
-                    "categoryReactor",
+                    "currencyReactor",
                     "ratingsReactor",
                     "cuisineReactor",
-                    "wifiReactor",
+                    "deliveringNowReactor",
                     "bookingReactor",
-                    "musicReactor",
-                    "dogReactor",
-                    "nameReactor"
-                  ]}}
+                    "deliveryReactor",
+                    "tableBookinReactor",
+                    "nameReactor",
+                    "RangeSliderSensor"
+                  ]
+                }}
               />
-              </div>
-          
             </div>
+          </div>
         </ReactiveBase>
       </div>
     );
   }
 }
-
 
 export default App;
