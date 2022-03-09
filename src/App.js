@@ -154,6 +154,7 @@ class App extends Component {
                   target="_blank"
                   href="https://github.com/appbaseio/reactivesearch"
                   className="btn link"
+                  rel="noreferrer"
                 >
                   <i className="fa fa-github" aria-hidden="true" /> Github
                 </a>
@@ -161,6 +162,7 @@ class App extends Component {
                   target="_blank"
                   href="https://opensource.appbase.io/reactive-manual/"
                   className="btn link"
+                  rel="noreferrer"
                 >
                   <i className="fa fa-book" aria-hidden="true" /> Documentation
                 </a>
