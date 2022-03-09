@@ -6,12 +6,13 @@ import {
   RatingsFilter,
   SelectedFilters,
   MultiDataList,
-  DataSearch,
-  RangeSlider
+  SearchBox,
+  RangeSlider,
+  ReactiveList,
 } from "@appbaseio/reactivesearch";
 
-import { ReactiveMap } from "@appbaseio/reactivemaps";
-import "./App.css";
+import { ReactiveGoogleMap } from "@appbaseio/reactivemaps";
+import "./styles.css";
 
 // Importing Images
 import americanFood from "./Images/americanFood.jpg";
@@ -43,19 +44,26 @@ class App extends Component {
       );
     }
 
-    const result = {
-      image: image,
-      title: resturant.name,
-      description: (
-        <div>
-          <p>{address}</p>
-          <span className="tag">{currency}</span>
-          <span className="tag">{cuisine}</span>
-          <div>Avg. Customer Reviews : {stars}</div>
-        </div>
-      )
-    };
-    return result;
+    return (
+      <ReactiveList.ResultListWrapper>
+        <ResultList key={resturant._id}>
+          <ResultList.Image src={image} />
+          <ResultList.Content>
+            <ResultList.Title>{resturant.name}</ResultList.Title>
+            <ResultList.Description>
+              <div>
+                <p>{address}</p>
+                <span key="currency" className="tag">
+                  {currency}
+                </span>
+                <span className="tag">{cuisine}</span>
+                <div>Avg. Customer Reviews : {stars}</div>
+              </div>
+            </ResultList.Description>
+          </ResultList.Content>
+        </ResultList>
+      </ReactiveList.ResultListWrapper>
+    );
   }
 
   onPopoverClick(marker) {
@@ -81,8 +89,9 @@ class App extends Component {
       <div className="container-fluid">
         <ReactiveBase
           app="yelp-app"
-          credentials="hkXdk3vcA:a32683f3-c8ad-45db-8c86-2ac2c0f45e0c"
-          type="yelp-app"
+          url="https://appbase-demo-ansible-abxiydt-arc.searchbase.io"
+          credentials="4030900a4f68:0a5020d9-f6e4-40e1-89f5-d563faa9d923"
+          enableAppbase
         >
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <a className="navbar-brand" href="#">
@@ -106,12 +115,38 @@ class App extends Component {
               id="navbarSupportedContent"
             >
               <div className="col-lg-7 dataSearch">
-                <DataSearch
+                <SearchBox
                   componentId="nameReactor"
                   placeholder="Search for Restaurants, Bars"
                   dataField="name"
                   searchInputId="NameSearch"
                   iconPosition="right"
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with DataSearch
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
+                  queryFormat="and"
+                  autosuggest={true}
+                  filterLabel="search"
+                  enableRecentSuggestions={true}
+                  enablePopularSuggestions={true}
+                  enablePredictiveSuggestions={true}
+                  popularSuggestionsConfig={{
+                    size: 3,
+                    minHits: 2,
+                    minChars: 4,
+                  }}
+                  recentSuggestionsConfig={{
+                    size: 3,
+                    minChars: 4,
+                  }}
+                  index="yelp-app"
+                  size={10}
                 />
               </div>
               <div className="links">
@@ -152,9 +187,18 @@ class App extends Component {
                       "deliveryReactor",
                       "bookingReactor",
                       "nameReactor",
-                      "RangeSliderSensor"
-                    ]
+                      "RangeSliderSensor",
+                    ],
                   }}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with Currency MultiList
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
               </div>
 
@@ -175,9 +219,18 @@ class App extends Component {
                       "musicReactor",
                       "bookingReactor",
                       "nameReactor",
-                      "RangeSliderSensor"
-                    ]
+                      "RangeSliderSensor",
+                    ],
                   }}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with Cuisine MultiList
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
               </div>
 
@@ -188,15 +241,24 @@ class App extends Component {
                   title="Average Cost for Two"
                   range={{
                     start: 0,
-                    end: 7000
+                    end: 7000,
                   }}
                   rangeLabels={{
                     start: "Low",
-                    end: "High"
+                    end: "High",
                   }}
                   react={{
-                    and: ["cuisineReactor", "currencyReactor"]
+                    and: ["cuisineReactor", "currencyReactor"],
                   }}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with RangeSlider
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
               </div>
 
@@ -209,13 +271,22 @@ class App extends Component {
                     { start: 4, end: 5, label: ">= 4 stars" },
                     { start: 3, end: 5, label: ">= 3 stars" },
                     { start: 2, end: 5, label: ">= 2 stars" },
-                    { start: 1, end: 5, label: "> 1 stars" }
+                    { start: 1, end: 5, label: "> 1 stars" },
                   ]}
                   showFilter={true}
                   filterLabel="Avg. Customer Reviews"
                   react={{
-                    and: [""]
+                    and: [""],
                   }}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with RatingsFilter
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
               </div>
 
@@ -228,9 +299,18 @@ class App extends Component {
                   data={[
                     {
                       label: "Delivering Now",
-                      value: true
-                    }
+                      value: true,
+                    },
                   ]}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with Delivering Now MultiDataList!!
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
 
                 <MultiDataList
@@ -240,9 +320,18 @@ class App extends Component {
                   data={[
                     {
                       label: "Has Table Bookings",
-                      value: true
-                    }
+                      value: true,
+                    },
                   ]}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with Table Booking MultiDataList!
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
                 <MultiDataList
                   dataField="online_delivery"
@@ -251,20 +340,29 @@ class App extends Component {
                   data={[
                     {
                       label: "Online Delivery",
-                      value: true
-                    }
+                      value: true,
+                    },
                   ]}
+                  renderError={(error) => (
+                    <div>
+                      Something went wrong with Online Delivery MultiDataList!
+                      <br />
+                      Error details
+                      <br />
+                      {error}
+                    </div>
+                  )}
                 />
               </div>
             </div>
             <div className="col-12 col-lg-6 col-md-6 col-sm-8 scroll marginBottom">
               <SelectedFilters />
-              <ResultList
+              <ReactiveList
                 componentId="queryResult"
                 dataField="name"
                 from={0}
                 size={15}
-                onData={this.onData}
+                renderItem={this.onData}
                 pagination={true}
                 react={{
                   and: [
@@ -276,22 +374,30 @@ class App extends Component {
                     "deliveryReactor",
                     "tableBookinReactor",
                     "nameReactor",
-                    "RangeSliderSensor"
-                  ]
+                    "RangeSliderSensor",
+                  ],
                 }}
+                renderError={(error) => (
+                  <div>
+                    Something went wrong with ResultList!
+                    <br />
+                    Error details
+                    <br />
+                    {error}
+                  </div>
+                )}
               />
             </div>
 
             <div className="col-lg-3 col-md-3 col-sm-6">
-              <ReactiveMap
+              <ReactiveGoogleMap
                 dataField="location"
                 componentId="maps"
-                defaultZoom={13}
+                defaultZoom={3}
                 defaultCenter={{ lat: 14.55436, lng: -85.76 }}
-                historicalData={true}
-                setMarkerCluster={true}
-                showMapStyles={false}
-                showSearchAsMove={false}
+                showMapStyles={true}
+                showSearchAsMove={true}
+                showMarkerClusters={true}
                 defaultMapStyle="Light Monochrome"
                 onPopoverClick={this.onPopoverClick}
                 autoCenter={true}
@@ -306,8 +412,8 @@ class App extends Component {
                     "deliveryReactor",
                     "tableBookinReactor",
                     "nameReactor",
-                    "RangeSliderSensor"
-                  ]
+                    "RangeSliderSensor",
+                  ],
                 }}
               />
             </div>
