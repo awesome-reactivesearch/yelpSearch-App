@@ -6,18 +6,16 @@ In the project directory, you can run:
 
 ### `npm start`
 
-
 ### Preview
-URL - https://relpsearch.netlify.com/
+
+URL - https://yelp-search-app.netlify.app/
 
 ##
 
-EDIT LIVE - https://codesandbox.io/s/1r70lvxkzl
-
+EDIT LIVE - https://dw4bj.csb.app/
 
 ![Alt Text](https://github.com/appbaseio-apps/yelpSearch-App/blob/master/Assets/Features.gif)
 
 ##
-
 
 ![Alt Text](https://github.com/appbaseio-apps/yelpSearch-App/blob/master/Assets/Responsive.gif)
