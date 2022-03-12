@@ -49,4 +49,51 @@
 
 .dataSearch {
   margin-top: 10px;
+  position: relative;
+  z-index: 10000000;
+}
+.input-group {
+  border: 1px solid #ccc;
+}
+.input-group input {
+  border: none;
+}
+
+.input-addon {
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+.input-addon {
+  border-radius: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+.focus-shortcut {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 0;
+  box-shadow: inset 0px -2px 0px 1px #cdcde6, inset 0 0 1px 1px #fff,
+    0 1px 2px 1px rgb(30 35 90 / 40%);
+  color: #969faf;
+  height: 24px;
+  padding-bottom: 2px;
+  position: relative;
+  top: -1px;
+  min-width: 24px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 20px;
+  cursor: default;
+  border: none;
+  padding-bottom: 4px;
+  background-color: transparent;
+}
+/* Responsive styling */
+@media (max-width: 768px) {
+  .input-addon {
+    display: none !important;
+  }
 }

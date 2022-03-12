@@ -121,7 +121,7 @@ class App extends Component {
                   placeholder="Search for Restaurants, Bars"
                   dataField="name"
                   searchInputId="NameSearch"
-                  iconPosition="right"
+                  iconPosition="left"
                   renderError={(error) => (
                     <div>
                       Something went wrong with DataSearch
@@ -148,6 +148,7 @@ class App extends Component {
                   }}
                   index="yelp-app"
                   size={10}
+                  addonAfter={<span className="focus-shortcut">/</span>}
                 />
               </div>
               <div className="links">
